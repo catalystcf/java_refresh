@@ -10,6 +10,11 @@ public class Word {
 	List<PuzzleChar> chars;
 	String asString = null;
 	
+	public Word()
+	{
+		this.chars = new ArrayList<PuzzleChar>();
+	};
+	
 	Word(Word word) 
 	{
 		this(word.chars);
@@ -23,8 +28,8 @@ public class Word {
 
 	
 
-	Word(PuzzleChar pch) {
-		this.chars = new ArrayList<PuzzleChar>();
+	public Word(PuzzleChar pch) {
+		this();
 		this.chars.add(pch);
 	}
 
@@ -49,7 +54,7 @@ public class Word {
 	 * @param pch
 	 * @return
 	 */
-	 Word append(PuzzleChar pch) {
+	 public Word append(PuzzleChar pch) {
 		Word w= new Word(this);
 		w.chars.add(pch);
 		
@@ -102,7 +107,7 @@ public class Word {
 	 * @param allWords
 	 * @return
 	 */
-	static List<String> convertToStings(List<Word> allWords) {
+	public static List<String> convertToStings(List<Word> allWords) {
 		return allWords.stream()
 				.map( x->x.asString() ).collect(Collectors.toList());
 	}
@@ -122,7 +127,7 @@ public class Word {
 		return false;
 	}
 
-	boolean contains(PuzzleChar pch) {
+	public boolean contains(PuzzleChar pch) {
 		
 		return this.chars.contains(pch);
 		
