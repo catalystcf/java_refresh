@@ -260,7 +260,7 @@ String fieldMapAsStrings [] = {
 				"seal",
 				"squid",
 				"hermit",
-				"crub",
+				"crab",
 				"urchin",
 				"lobster",
 				"surf",
