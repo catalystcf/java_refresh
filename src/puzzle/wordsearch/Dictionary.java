@@ -23,6 +23,11 @@ public class Dictionary {
 	{
 	}
 	
+	public Set<String> getAllWords()
+	{
+		return words;
+	}
+	
 	public void init() throws IOException
 	{
 			

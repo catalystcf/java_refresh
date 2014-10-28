@@ -2,7 +2,6 @@ package puzzle.wordsearch;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.util.Arrays;
