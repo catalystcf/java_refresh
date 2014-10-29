@@ -6,9 +6,9 @@ package puzzle.wordsearch;
  * @author Alex Ar
  *
  */
-class Loc {
-	int row;
-	int col;
+public class Loc {
+	public int row;
+	public int col;
 
 	public Loc(int x2, int y2) {
 		this.row = x2;

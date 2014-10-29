@@ -118,12 +118,12 @@ public class Dictionary {
 	
 	}
 
-	boolean isValidWord(Word ww) {
+	public boolean isValidWord(Word ww) {
 		String sz = ww.asString();
 		return  this.words.contains(sz) ;
 	}
 
-	boolean isValidSegment(Word ww) {
+	public boolean isValidSegment(Word ww) {
 		
 			assert( ww.length() >= 2);
 	

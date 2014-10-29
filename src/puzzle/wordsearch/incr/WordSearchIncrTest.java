@@ -1,6 +1,8 @@
-package puzzle.wordsearch;
+package puzzle.wordsearch.incr;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,17 +13,20 @@ import java.util.stream.Collectors;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Collections;
+import puzzle.wordsearch.Field;
+import puzzle.wordsearch.PuzzleChar;
+import puzzle.wordsearch.SearchTestUtils;
+import puzzle.wordsearch.Word;
 
 public class WordSearchIncrTest {
 	
-	Dictionary d;
+	SearchTestUtils STU;
+	// Dictionary d;
 	
 	@Before
 	public void setup() throws IOException
 	{
-		d = new Dictionary();
-		d.init();	
+		this.STU = new SearchTestUtils();
 	}
 	
 
@@ -67,7 +72,8 @@ public class WordSearchIncrTest {
 		f.start();
 		
 
-		WordSearch ws = new WordSearch(f,d);
+		WordSearchIncr ws = new WordSearchIncr(STU.getDictionary());
+		ws.init(f);
 		ws.processNextLetter();
 		
 		assertTrue( ws.partialWords.size() == 1);
@@ -98,7 +104,8 @@ public class WordSearchIncrTest {
 		Field f = new Field(fieldMap);
 		f.start();
 		
-		WordSearch ws = new WordSearch(f,d);
+		WordSearchIncr ws = new WordSearchIncr(STU.getDictionary());
+		ws.init(f);
 		
 		while(!ws.field.isEnd())
 		{
@@ -141,7 +148,9 @@ public class WordSearchIncrTest {
 		f.start();
 		
 		
-		WordSearch ws = new WordSearch(f, d);
+		WordSearchIncr ws = new WordSearchIncr(STU.getDictionary());
+		ws.init(f);
+		
 		List <Word> allWords = ws.findAllWords();
 		
 		List<String>  allWordsAsString = Word.convertToStings(allWords);
@@ -169,7 +178,10 @@ public class WordSearchIncrTest {
 				 { 'm', 'p', 'l' , 'k'}
 				};
 
-		runSimpleSimple(fieldMap);
+		String [] expected = { "simple" };
+		WordSearchIncr ws = new WordSearchIncr(STU.getDictionary());
+		
+		SearchTestUtils.runSearch(fieldMap, expected, ws);
 	}
 
 	@Test
@@ -179,109 +191,16 @@ public class WordSearchIncrTest {
 				 { 'e', 'l', 'p', 'm', 'i', 's'},
 		};
 
-		runSimpleSimple(fieldMap);
+		String [] expected = { "simple" };
+		WordSearchIncr ws = new WordSearchIncr(STU.getDictionary());
+		
+		SearchTestUtils.runSearch(fieldMap, expected, ws);
+		
+		
 	}
 
 	
-	/**
-	 * Run a fieldMap that should result in a word 'simple'
-	 * @param fieldMap
-	 */
-	void runSimpleSimple(char [][] fieldMap)
-	{
-		String [] expected = { "simple" };
-		
-		runSearch( fieldMap, expected);
+
+	
+	
 	}
-	
-	void runSearch( char[][] fieldMap, String [] expected)
-	{
-				Field f = new Field(fieldMap);
-				f.start();
-					
-				WordSearch ws = new WordSearch(f, d);
-				List <Word> allWords = ws.findAllWords();
-				
-				List<String>  allWordsAsString = Word.convertToStings(allWords);
-				allWords.stream()
-						.map( x->x.asString() ).collect(Collectors.toList());
-				
-				allWords.forEach( w -> System.out.println( w.asString() ));
-				
-				for(String exp:expected)
-				{
-					if (!allWordsAsString.contains( exp ) )
-					{
-						System.out.println("NOT FOUND: = [" + exp + "]");
-					}
-					assertTrue( allWordsAsString.contains( exp ));		
-				}
-			
-	}
-	
-	@Test
-	public void  testRealPuzzle()
-	{
-		// http://www.vangviet.com/amazing-word-search-puzzle/
-String fieldMapAsStrings [] = {
-"S P S L H O L A W L D R C L R",
-"A U S E A S T A R E T S B O L", 
-"H S S H B G T E L C R L R S R", 
-"E L A H W K C A B P M U H L T",
-"R T R R E D N U O L F A A K K",
-"R C G R M R E Y F S R N N R E",
-"I A L U O S M M W B F E D A L",
-"N U E A O I U I O R I M I H E",
-"G R E E N T U R T L E O U S D",
-"G C T B S I S L F C O N Q R E",
-"U H A N N E R P G C R E S R A",
-"L I K S A N D D O L L A R I O",
-"L N S L I E L C A N R A B I E",
-"S J E L L Y F I S H G F M A T",
-"S O C I R R N A R S T E S L N" };
-	
-	char [][] fieldMap = new char[fieldMapAsStrings.length][fieldMapAsStrings.length];
-	
-	for(int i=0; i < fieldMapAsStrings.length; i++)
-	{
-		String line = fieldMapAsStrings[i].toLowerCase();
-		String [] chars = line.split(" ");
-		for (int j=0; j < chars.length; j++)
-		{
-			fieldMap[i][j] = chars[j].charAt(0);
-		}
-	}
-	
-		String [] expected = { 
-				"humpback",
-				"whale",
-				"sponge",
-				"harbor",
-				"seal",
-				"squid",
-				"hermit",
-				"crab",
-				"urchin",
-				"lobster",
-				"surf",
-				"clam",
-				"herring",
-				"gull",
-				"flounder",
-				"moon",
-				"snail",
-				"barnacle",
-				"green",
-				"turtle",
-				"sand",
-				"dollar",
-				"eel",
-				"grass",
-				"jellyfish",
-				"anemone",
-				"shark",
-				"skate"
-		};
-		runSearch(fieldMap, expected );
-	}
-}

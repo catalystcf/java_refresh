@@ -7,7 +7,7 @@ import static java.lang.Math.abs;
 public class PuzzleChar {
 
 	final public char ch;
-	final Loc loc;
+	final public Loc loc;
 	
 	public PuzzleChar(char ch, Loc loc) {
 		this.ch = ch;

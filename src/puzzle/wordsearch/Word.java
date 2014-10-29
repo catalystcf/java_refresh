@@ -33,18 +33,18 @@ public class Word {
 		this.chars.add(pch);
 	}
 
-	PuzzleChar begin()
+	public PuzzleChar begin()
 	{
 		return chars.get(0);
 	}
 	
-	PuzzleChar end()
+	public PuzzleChar end()
 	{
 		
 		return chars.get(chars.size() -1);
 	}
 
-	int length() {
+	public int length() {
 		return chars.size();
 	}
 
@@ -61,7 +61,7 @@ public class Word {
 		return w;
 	}
 
-	Word append(PuzzleChar pch, Word tail) {
+	public Word append(PuzzleChar pch, Word tail) {
 		List<PuzzleChar> chars = new ArrayList<PuzzleChar>(this.length() + 1 + tail.length());
 		chars.addAll(this.chars);
 		chars.add(pch);
@@ -71,7 +71,7 @@ public class Word {
 	}
  
 	 
-	Word prePend(PuzzleChar pch) {
+	public Word prePend(PuzzleChar pch) {
 		List<PuzzleChar> chars = new ArrayList<PuzzleChar>(this.chars.size() + 1);
 		
 		chars.add(pch);
@@ -131,6 +131,31 @@ public class Word {
 		
 		return this.chars.contains(pch);
 		
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((chars == null) ? 0 : chars.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Word other = (Word) obj;
+		if (chars == null) {
+			if (other.chars != null)
+				return false;
+		} else if (!chars.equals(other.chars))
+			return false;
+		return true;
 	}
 
 	
