@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.junit.Before;
@@ -76,9 +77,11 @@ public class WordSearchIncrTest {
 		ws.init(f);
 		ws.processNextLetter();
 		
-		assertTrue( ws.partialWords.size() == 1);
+		Set<Word> allpartialWords = ws.partialWordsMap.getAllWords();
 		
-		Word firstWord = ws.partialWords.get(0);
+		assertTrue( allpartialWords.size() == 1);
+		
+		Word firstWord = allpartialWords.iterator().next();
 		PuzzleChar firstChar = firstWord.begin();
 		PuzzleChar lastChar =  firstWord.end();
 		
@@ -113,8 +116,10 @@ public class WordSearchIncrTest {
 			ws.field.next();
 		}
 		
-		System.out.println(ws.partialWords);
-		System.out.println("SIZE = " + ws.partialWords.size());
+		Set<Word> allpartialWords = ws.partialWordsMap.getAllWords();
+		
+		System.out.println(allpartialWords);
+		System.out.println("SIZE = " + allpartialWords.size());
 		
 		System.out.println(ws.foundWords);
 		System.out.println("WORDS FOUND = " + ws.foundWords.size());

@@ -1,11 +1,15 @@
 package puzzle.wordsearch.incr;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import puzzle.wordsearch.Dictionary;
 import puzzle.wordsearch.Field;
+import puzzle.wordsearch.Loc;
 import puzzle.wordsearch.PuzzleChar;
 import puzzle.wordsearch.Word;
 import puzzle.wordsearch.WordSearch;
@@ -13,7 +17,8 @@ import puzzle.wordsearch.WordSearch;
 public class WordSearchIncr implements WordSearch {
 
 	Field field;
-	List<Word> partialWords;
+	// List<Word> partialWords;
+	StartAndEndMap partialWordsMap;
 	List<Word> foundWords;
 	Dictionary dict;
 	
@@ -26,7 +31,7 @@ public class WordSearchIncr implements WordSearch {
 	public void init(Field f) {
 		
 		this.field = f;
-		partialWords = new ArrayList<Word>();
+		partialWordsMap = new StartAndEndMap(); 
 		foundWords = new ArrayList<Word>();
 		
 	}
@@ -44,11 +49,21 @@ public class WordSearchIncr implements WordSearch {
 		List<Word> partialWordsPrefixed = new ArrayList<Word>();
 		List<Word> partialWordsSuffixed = new ArrayList<Word>();
 		// Check what new segments we can form by adding a new char to existing segments
-		for( Word segment:partialWords)
+		
+		List<PuzzleChar> neighborsChars = field.getNeighbours(pch);
+		for( PuzzleChar neighbor:neighborsChars)
 		{
-			// check if the letter is close to the beginning or an end
-			if ( segment.begin().isNeighbour(pch) )
+			Set<Word> partialWordsStart = partialWordsMap.getByStart(neighbor.loc);
+			
+			if ( partialWordsStart != null)
+			for( Word segment:partialWordsStart)
 			{
+				// check if the letter is close to the beginning or an end
+				if ( !segment.begin().isNeighbour(pch) )
+				{
+					throw( new RuntimeException("DID NOT WORK"));
+				};
+				
 				Word newSegment = segment.prePend(pch);
 				if (dict.isValidSegment(newSegment))
 				{
@@ -56,11 +71,16 @@ public class WordSearchIncr implements WordSearch {
 					partialWordsPrefixed.add(segment);
 				}
 			}
-			
-			
-			
-			if ( segment.end().isNeighbour(pch))
+
+			Set<Word> partialWordsEnd = partialWordsMap.getByEnd(neighbor.loc);
+			if ( partialWordsEnd != null)
+			for( Word segment:partialWordsEnd)
 			{
+				if ( !segment.end().isNeighbour(pch))
+				{
+					throw new RuntimeException("DiD NOT WORK");
+				}
+				
 				Word newSegment = segment.append(pch);
 				if (dict.isValidSegment(newSegment))
 				{
@@ -98,8 +118,8 @@ public class WordSearchIncr implements WordSearch {
 		Word firstLetterWord = new Word(pch);
 		
 		
-		partialWords.add(firstLetterWord);
-		partialWords.addAll(newSegments);
+		partialWordsMap.put(firstLetterWord);
+		partialWordsMap.addAll(newSegments);
 		
 		foundWords.addAll(newWords);
 	}
