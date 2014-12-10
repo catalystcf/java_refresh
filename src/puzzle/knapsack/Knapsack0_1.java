@@ -3,13 +3,28 @@ package puzzle.knapsack;
 import java.util.HashMap;
 
 
-
+/** solution to the 0/1 Knapsack problem using 
+ * memoization
+ * 
+ * 
+ * http://cse.unl.edu/~goddard/Courses/CSCE310J/Lectures/Lecture8-DynamicProgramming.pdf
+ * 
+ * @author alexar
+ *
+ */
 public class Knapsack0_1 {
 
 	int[] values = { 3,4,7,6,4,8, 9, 3, 4, 5 };
 	int[] weights = {6,7,8,3,4,5, 6, 4, 3, 5 };
-	
 	int W = 20;
+	
+	// Examples from the PDF above
+	// Elements (weight, benefit):
+	// (2,3), (3,4), (4,5), (5,6)
+    // int[] weights = {2,3,4,5}; 
+	// int[] values = { 3,4,5,6 }; 
+	
+	// int W = 5;
 	int total_calculations;
 	
 	/** cache of previous calculations
@@ -18,7 +33,17 @@ public class Knapsack0_1 {
 	 */
 	HashMap<Integer, HashMap<Integer, Integer>> cache = new HashMap<Integer, HashMap<Integer, Integer> >();
 	
-	
+	/**
+	 * Find optimal solution for the remaining weight in the backpack:
+	 * * if we already calculated the value, return that value
+	 * * Calculate the best knapsack value with and without the item 'i'
+	 * * Choose a max of the two (with and without current item)
+	 * * store results in case of recursion by current item and remaining weight
+	 * 
+	 * @param i - Item to consider
+	 * @param curr_weight - Remaining weight in the backpack
+	 * @return maximum value of the backpack
+	 */
 	int _recursive_max_values(int i, int curr_weight) {
 		
 		
@@ -49,7 +74,7 @@ public class Knapsack0_1 {
 			optimal_sub_value = Math.max( with_last_item,  without_last_item);
 		}
 		
-		// store before we leave
+		// store in case it is needed in the future
 		if ( !cache.containsKey(i) ) cache.put(i,  new HashMap<Integer, Integer>());
 		
 		// Comment this line to see calculations without caching.
